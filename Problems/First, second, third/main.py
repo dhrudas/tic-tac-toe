@@ -1,0 +1,3 @@
+print("""first
+second
+third""")
