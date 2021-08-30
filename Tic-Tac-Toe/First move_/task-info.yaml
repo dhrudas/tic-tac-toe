@@ -114,19 +114,19 @@ files:
                 raise WrongAnswer(
                     f"Tic-Tac-Toe field should contain 3 rows, found {len(lines)}")
 
-            for line in lines:
-                cols = line[2], line[4], line[6]
-                x: int = 0
-                for c in cols:
-                    state = get_state(c)
-                    if state is None:
-                        return None
-                    try:
+            try:
+                for line in lines:
+                    cols = line[2], line[4], line[6]
+                    x: int = 0
+                    for c in cols:
+                        state = get_state(c)
+                        if state is None:
+                            return None
                         field[y][x] = state
-                    except IndexError:
-                        pass
-                    x += 1
-                y += 1
+                        x += 1
+                    y += 1
+            except IndexError:
+                raise WrongAnswer("Can't parse your output! Make sure you print the game field like in examples!")
 
             return TicTacToeField(constructed=field)
 
@@ -255,7 +255,7 @@ files:
 
 
     if __name__ == '__main__':
-        TicTacToeTest('tictactoe.tictactoe').run_tests()
+        TicTacToeTest().run_tests()
   learner_created: false
 feedback_link: https://hyperskill.org/projects/73/stages/402/implement#comment
 status: Unchecked

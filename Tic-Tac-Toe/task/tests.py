@@ -100,16 +100,19 @@ class TicTacToeField:
 
         y: int = 2
 
-        for line in lines:
-            cols = line[2], line[4], line[6]
-            x: int = 0
-            for c in cols:
-                state = get_state(c)
-                if state is None:
-                    return None
-                field[y][x] = state
-                x += 1
-            y -= 1
+        try:
+            for line in lines:
+                cols = line[2], line[4], line[6]
+                x: int = 0
+                for c in cols:
+                    state = get_state(c)
+                    if state is None:
+                        return None
+                    field[y][x] = state
+                    x += 1
+                y -= 1
+        except IndexError:
+            raise WrongAnswer("Can't parse your output! Make sure you print the game field like in examples!")
 
         return TicTacToeField(constructed=field)
 
@@ -142,15 +145,23 @@ class TicTacToeField:
 class TicTacToeTest(StageTest):
     def generate(self) -> List[TestCase]:
         tests: List[TestCase] = [
-            TestCase(stdin="O_OXXO_XX", copy_to_attach=True),
-            TestCase(stdin="OXO__X_OX", copy_to_attach=True),
-            TestCase(stdin="_________", copy_to_attach=True),
-            TestCase(stdin="_O__X___X", copy_to_attach=True)
+            TestCase(stdin="XXXOO__O_", attach=("XXXOO__O_", "X wins")),
+            TestCase(stdin="XOXOXOXXO", attach=("XOXOXOXXO", "X wins")),
+            TestCase(stdin="XOOOXOXXO", attach=("XOOOXOXXO", "O wins")),
+            TestCase(stdin="XOXOOXXXO", attach=("XOXOOXXXO", "Draw")),
+            TestCase(stdin="XO_OOX_X_", attach=("XO_OOX_X_", "Game not finished")),
+            TestCase(stdin="XO_XO_XOX", attach=("XO_XO_XOX", "Impossible")),
+            TestCase(stdin="_O_X__X_X", attach=("_O_X__X_X", "Impossible")),
+            TestCase(stdin="_OOOO_X_X", attach=("_OOOO_X_X", "Impossible"))
         ]
         return tests
 
     def check(self, reply: str, attach: str) -> CheckResult:
+
+        clue_input, clue_result = attach
+
         fields = TicTacToeField.parse_all(reply)
+
         if len(fields) == 0:
             return CheckResult.wrong(
                 "Can't parse the field! "
@@ -165,13 +176,45 @@ class TicTacToeTest(StageTest):
             )
 
         user_field = fields[0]
-        input_field = TicTacToeField(field=attach)
+        input_field = TicTacToeField(field=clue_input)
+
         if not user_field.equal_to(input_field):
             return CheckResult.wrong(
                 "Your field doesn't match expected field"
             )
+
+        lines = reply.splitlines()
+        lines = [i.strip() for i in lines]
+        lines = [i for i in lines if len(i) > 0]
+
+        last_line = lines[-1]
+
+        outcomes = [
+            "X wins",
+            "O wins",
+            "Draw",
+            "Game not finished",
+            "Impossible"
+        ]
+
+        if last_line not in outcomes:
+            return CheckResult.wrong(
+                "Can't parse result, "
+                "should be one of the outcomes mentioned in description. "
+                "\nYour last line: \"" + last_line + "\""
+            )
+
+        if last_line != clue_result:
+            return CheckResult.wrong(
+                "The result is incorrect. " +
+                "\nShould be: \"" + clue_result + "\", " +
+                "\nfound: \"" + last_line + "\". " +
+                "\nCheck if your program works correctly "
+                "in test examples in description."
+            )
+
         return CheckResult.correct()
 
 
 if __name__ == '__main__':
-    TicTacToeTest('tictactoe.tictactoe').run_tests()
+    TicTacToeTest().run_tests()

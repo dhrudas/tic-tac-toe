@@ -110,16 +110,19 @@ files:
 
             y: int = 2
 
-            for line in lines:
-                cols = line[2], line[4], line[6]
-                x: int = 0
-                for c in cols:
-                    state = get_state(c)
-                    if state is None:
-                        return None
-                    field[y][x] = state
-                    x += 1
-                y -= 1
+            try:
+                for line in lines:
+                    cols = line[2], line[4], line[6]
+                    x: int = 0
+                    for c in cols:
+                        state = get_state(c)
+                        if state is None:
+                            return None
+                        field[y][x] = state
+                        x += 1
+                    y -= 1
+            except IndexError:
+                raise WrongAnswer("Can't parse your output! Make sure you print the game field like in examples!")
 
             return TicTacToeField(constructed=field)
 
@@ -224,8 +227,45 @@ files:
 
 
     if __name__ == '__main__':
-        TicTacToeTest('tictactoe.tictactoe').run_tests()
+        TicTacToeTest().run_tests()
   learner_created: false
+- name: ghost/ghost.py
+  visible: true
+  text: |
+    from random import randint
+
+    print("GHOST GAME!")
+    still_alive = True
+    score = 0
+
+    while still_alive:
+        ghost_door = randint(1, 7)
+        print("7 doors ahead...")
+        print("A ghost behind one ...")
+        print("Which door do you open?")
+        door = input("1, 2, 3, 4 , 5 , 6 or 7?")
+        answer = int(door)
+        if answer  < 1 or answer  > 7:
+            print("Wrong door!")
+            continue
+
+        if answer == ghost_door:
+            print("GHOST!!!")
+            still_alive = False
+        else:
+            print("No ghost!")
+            print("You enter the next room...")
+            score = score + 1
+
+    print("Game over! You scored: ", score)
+  learner_created: true
 feedback_link: https://hyperskill.org/projects/73/stages/401/implement#comment
-status: Unchecked
+status: Failed
+feedback:
+  message: "Wrong answer in test #1\n\nCan't parse result, should be one of the outcomes\
+    \ mentioned in description. \nYour last line: \"---------\"\n\nPlease find below\
+    \ the output of your program during this failed test.\nNote that the '>' character\
+    \ indicates the beginning of the input line.\n\n---\n\n> XXXOO__O_\n---------\n\
+    | X X X |\n| O O _ |\n| _ O _ |\n---------"
+  time: Tue, 24 Aug 2021 14:04:35 UTC
 record: -1

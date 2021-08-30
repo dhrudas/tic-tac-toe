@@ -10,3 +10,4 @@ num3 = int(num3)
 s = num1 + num2 + num3
 
 print(s)
+print(sum([num1, num2, num3]))

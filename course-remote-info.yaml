@@ -3,7 +3,7 @@ hyperskill_project:
   ide_files: https://stepik.org/media/attachments/lesson/239550/additional_files.json
   is_template_based: false
   use_ide: true
-update_date: Sun, 14 Feb 2021 20:16:34 UTC
+update_date: Tue, 24 Aug 2021 19:04:28 UTC
 stages:
 - id: 399
   step: 6503
@@ -73,18 +73,18 @@ topics:
   - title: Nested lists
     theory_id: 6938
   3:
-  - title: Invoking a function
-    theory_id: 5891
-  - title: Declaring a function
-    theory_id: 5900
-  - title: Scopes
-    theory_id: 6322
   - title: Quotes and multi-line strings
     theory_id: 5814
   - title: Escape sequences
     theory_id: 7130
   - title: Type casting
     theory_id: 6224
+  - title: Invoking a function
+    theory_id: 5891
+  - title: Declaring a function
+    theory_id: 5900
+  - title: Scopes
+    theory_id: 6322
   - title: Basic string methods
     theory_id: 6842
   - title: Split and join
